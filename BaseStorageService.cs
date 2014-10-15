@@ -66,7 +66,7 @@ namespace Cirrious.CrossCore.MvvmCrossDAL
 
         public virtual List<TModel> FindAll()
         {
-            return FindAll(30, new TGetOptions());
+            return FindAll(0, new TGetOptions());
         }
 
         public virtual List<TModel> FindAll(TGetOptions options)
