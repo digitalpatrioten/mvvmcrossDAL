@@ -6,6 +6,8 @@ namespace Cirrious.CrossCore.MvvmCrossDAL
 {
     public interface IStorageAccess<TModel,TGetOptions>
     {
+        event ModelChangedEventHandler ModelChanged;
+
         TModel Find(string id);
 
         TModel Find(string id, TGetOptions options);
@@ -20,13 +22,15 @@ namespace Cirrious.CrossCore.MvvmCrossDAL
         List<TModel> FindAll(int limit, TGetOptions options);
 
 
-        TModel Save(TModel data);
+        TModel Save(TModel data, bool forceOverride = false);
 
         TModel GetNewModel();
 
         bool clearStorage(string storageNamespace = "_default_");
 
-        TModel AddToStorage(TModel item);
+        TModel AddToStorage(TModel item, bool forceOverride = false);
+
+        TModel LoadFromStorage(string Id, string storageNamespace = "_default_");
     }
 }
 
