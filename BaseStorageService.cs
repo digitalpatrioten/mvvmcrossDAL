@@ -25,7 +25,7 @@ namespace Cirrious.CrossCore.MvvmCrossDAL
         /**
          * Must return true, if the item could be created in the backend
          * */
-        protected abstract bool UpdateElement(TModel item, ref TUpdateOptions options);
+        protected abstract bool UpdateElement(TModel item, ref TUpdateOptions options, ref bool addToStorageIsHandledInternally, ref TModel savedModel);
 
         //protected abstract bool DeleteElement(TModel item, ref TDeleteOptions options);
         protected virtual bool DeleteElement(TModel item, TGetOptions options)
@@ -109,14 +109,19 @@ namespace Cirrious.CrossCore.MvvmCrossDAL
             }
             else {
                 TUpdateOptions options = new TUpdateOptions();
-
-                if (UpdateElement(item, ref options)) {
+                var addIsAlreadyHandled = false;
+                var handledModel = new TModel();
+                if (UpdateElement(item, ref options, ref addIsAlreadyHandled, ref handledModel)) {
                     if (!ValidateModelId(item)) { // invalid id in the model
                         // TODO: maybe even throw an exception here -should never happen
                         return default(TModel);
                     }
-
-                    return AddToStorage(item, StorageInitializeNamespace(options), forceOverride);
+                    if (!addIsAlreadyHandled) {
+                        return AddToStorage(item, StorageInitializeNamespace(options), forceOverride);
+                    }
+                    else {
+                        return handledModel;
+                    }
                 }
             }
             // If the backend was able to update it, update it to in our storage

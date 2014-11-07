@@ -35,7 +35,7 @@ namespace Cirrious.CrossCore.MvvmCrossDAL.Examples
             return GenreDto.fromJson(oneResponse);
         }
 
-        protected override bool UpdateElement(Genre item, ref GetGenreRequest options)
+        protected override bool UpdateElement(Genre item, ref GetGenreRequest options, ref bool addIsAlreadyHandled, ref Genre handledModel)
         {
             throw new NotImplementedException();
         }
